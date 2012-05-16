@@ -36,9 +36,17 @@ import (
 
 func main() {
   client := godis.New("tcp:127.0.0.1:6379", 0, "") // Create new Redis client to use for enqueuing
-  resque.Enqueue(client, "go", "Demo::Job") // Enqueue the job into the "go" queue with appropriate client
-  resque.Enqueue(client, "default", "Demo::Job", 1) // Enqueue into the "default" queue with passing one parameter to the Demo::Job.perform
-  resque.Enqueue(client, "default", "Demo::Job", 1, 2, "woot") // Enqueue into the "default" queue with passing multiple parameters to the Demo::Job.perform so it will fail
+
+  // Enqueue the job into the "go" queue with appropriate client
+  resque.Enqueue(client, "go", "Demo::Job")
+
+  // Enqueue into the "default" queue with passing one parameter to the Demo::Job.perform
+  resque.Enqueue(client, "default", "Demo::Job", 1)
+
+
+  // Enqueue into the "default" queue with passing multiple
+  // parameters to the Demo::Job.perform so it will fail
+  resque.Enqueue(client, "default", "Demo::Job", 1, 2, "woot")
 }
 ```
 
