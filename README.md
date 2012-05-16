@@ -43,7 +43,6 @@ func main() {
   // Enqueue into the "default" queue with passing one parameter to the Demo::Job.perform
   resque.Enqueue(client, "default", "Demo::Job", 1)
 
-
   // Enqueue into the "default" queue with passing multiple
   // parameters to the Demo::Job.perform so it will fail
   resque.Enqueue(client, "default", "Demo::Job", 1, 2, "woot")
