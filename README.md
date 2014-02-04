@@ -1,5 +1,6 @@
 # WARNING!
-# Currently README is OUTDATED! Work is progress!
+# Currently README is OUTDATED! Work in progress!
+# Use [v0.1.0](https://github.com/kavu/go-resque/tree/v0.1.0) if you need previous implementation.
 
 # go-resque
 
