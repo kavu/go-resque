@@ -1,3 +1,6 @@
+# WARNING!
+# Currently README is OUTDATED! Work is progress!
+
 # go-resque
 
 Simple [Resque](https://github.com/defunkt/resque) queue client for [Go](http://golang.org).
