@@ -47,5 +47,5 @@ func (enqueuer *redisEnqueuer) Enqueue(queue, jobClass string, args ...jobArg) (
 		return -1, err
 	}
 
-	return enqueuer.drv.ListPush(queue, string(jobJson))
+	return enqueuer.drv.ListPush("resque:queue:"+queue, string(jobJson))
 }
