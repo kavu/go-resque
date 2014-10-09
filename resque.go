@@ -28,7 +28,7 @@ func NewRedisEnqueuer(drvName string, client interface{}) *RedisEnqueuer {
 	}
 
 	drv.SetClient(client)
-	return &redisEnqueuer{drv: drv}
+	return &RedisEnqueuer{drv: drv}
 }
 
 type RedisEnqueuer struct {

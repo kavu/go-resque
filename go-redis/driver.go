@@ -19,8 +19,11 @@ func (d *drv) SetClient(client interface{}) {
 	d.client = client.(*redis.Client)
 }
 
-func (d *drv) ListPush(queue string, jobJson string) (int64, error) {
-	ret_int, err := d.client.LPush(queue, jobJson)
-	ret_int64 := int64(ret_int)
-	return ret_int64, err
+func (d *drv) ListPush(queue string, jobJSON string) (int64, error) {
+	listLength, err := d.client.LPush(queue, jobJSON)
+	if err != nil {
+		return -1, err
+	}
+
+	return int64(listLength), err
 }
