@@ -2,7 +2,6 @@ package resque
 
 import (
 	"encoding/json"
-	// "github.com/davecgh/go-spew/spew"
 	"github.com/kavu/go-resque/driver"
 )
 
@@ -29,7 +28,7 @@ func Register(name string, driver driver.Enqueuer) {
 func NewRedisEnqueuer(drvName string, client interface{}) *redisEnqueuer {
 	drv, ok := drivers[drvName]
 	if !ok {
-		panic("No driver " + drvName)
+		panic("No such driver: " + drvName)
 	}
 
 	drv.SetClient(client)
@@ -42,10 +41,10 @@ func (enqueuer *redisEnqueuer) Enqueue(queue, jobClass string, args ...jobArg) (
 		args = append(make([]jobArg, 0), make(map[string]jobArg, 0))
 	}
 
-	jobJson, err := json.Marshal(&job{jobClass, args})
+	jobJSON, err := json.Marshal(&job{jobClass, args})
 	if err != nil {
 		return -1, err
 	}
 
-	return enqueuer.drv.ListPush("resque:queue:"+queue, string(jobJson))
+	return enqueuer.drv.ListPush(queue, string(jobJSON))
 }
