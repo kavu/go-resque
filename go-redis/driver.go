@@ -20,7 +20,7 @@ func (d *drv) SetClient(client interface{}) {
 }
 
 func (d *drv) ListPush(queue string, jobJSON string) (int64, error) {
-	listLength, err := d.client.LPush(queue, jobJSON)
+	listLength, err := d.client.RPush(queue, jobJSON)
 	if err != nil {
 		return -1, err
 	}
