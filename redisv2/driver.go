@@ -27,7 +27,7 @@ func (d *drv) SetClient(name string, client interface{}) {
 }
 
 func (d *drv) ListPush(queue string, jobJSON string) (int64, error) {
-	return 1, d.client.Rpush(queue, []byte(jobJSON))
+	return 1, d.client.Rpush(d.nameSpace+"queue:"+queue, []byte(jobJSON))
 }
 
 func (d *drv) ListPushDelay(t time.Time, queue string, jobJSON string) (bool, error) {
