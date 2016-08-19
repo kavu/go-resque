@@ -11,6 +11,10 @@ var drivers = make(map[string]driver.Enqueuer)
 
 type jobArg interface{}
 
+type MockRedisDriver struct {
+	driver.Enqueuer
+}
+
 type job struct {
 	Queue string   `json:"queue,omitempty"`
 	Class string   `json:"class"`
