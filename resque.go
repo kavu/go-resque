@@ -2,6 +2,8 @@ package resque
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/kavu/go-resque/driver"
 )
 
@@ -9,7 +11,12 @@ var drivers = make(map[string]driver.Enqueuer)
 
 type jobArg interface{}
 
+type MockRedisDriver struct {
+	driver.Enqueuer
+}
+
 type job struct {
+	Queue string   `json:"queue,omitempty"`
 	Class string   `json:"class"`
 	Args  []jobArg `json:"args"`
 }
@@ -21,13 +28,14 @@ func Register(name string, driver driver.Enqueuer) {
 	drivers[name] = driver
 }
 
-func NewRedisEnqueuer(drvName string, client interface{}) *RedisEnqueuer {
+func NewRedisEnqueuer(drvName string, client interface{}, nameSpace string) *RedisEnqueuer {
 	drv, ok := drivers[drvName]
 	if !ok {
 		panic("No such driver: " + drvName)
 	}
 
-	drv.SetClient(client)
+	drv.SetClient(nameSpace, client)
+	drv.Poll()
 	return &RedisEnqueuer{drv: drv}
 }
 
@@ -41,10 +49,25 @@ func (enqueuer *RedisEnqueuer) Enqueue(queue, jobClass string, args ...jobArg) (
 		args = append(make([]jobArg, 0), make(map[string]jobArg, 0))
 	}
 
-	jobJSON, err := json.Marshal(&job{jobClass, args})
+	jobJSON, err := json.Marshal(&job{Class: jobClass, Args: args})
 	if err != nil {
 		return -1, err
 	}
 
 	return enqueuer.drv.ListPush(queue, string(jobJSON))
+}
+
+// EnqueueIn enque a job at a duration
+func (enqueuer *RedisEnqueuer) EnqueueIn(delay time.Duration, queue, jobClass string, args ...jobArg) (bool, error) {
+	enqueueTime := time.Now().Add(delay)
+
+	if len(args) == 0 {
+		args = append(make([]jobArg, 0), make(map[string]jobArg, 0))
+	}
+
+	jobJSON, err := json.Marshal(&job{Class: jobClass, Args: args, Queue: queue})
+	if err != nil {
+		return false, err
+	}
+	return enqueuer.drv.ListPushDelay(enqueueTime, queue, string(jobJSON))
 }
