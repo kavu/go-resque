@@ -62,5 +62,6 @@ func (d *drv) Poll() {
 				}
 			}
 		}
+		time.Sleep(100 * time.Millisecond)
 	}(d)
 }
