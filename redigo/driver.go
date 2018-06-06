@@ -64,7 +64,7 @@ func (d *drv) Poll() {
 					(*d.client).Do("LPUSH", d.nameSpace+"queue:"+queue, jobs[0])
 				}
 			}
+			time.Sleep(100 * time.Millisecond)
 		}
-		time.Sleep(100 * time.Millisecond)
 	}(d)
 }
