@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if ! type go-commitlinter >/dev/null 2>/dev/null; then
+        echo ""
+    echo "commitlint could not be found"
+    echo "try again after installing go-commitlinter or add go-commitlinter to PATH"
+        echo ""
+    exit 2;
+fi
+
+go-commitlinter $1

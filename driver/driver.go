@@ -1,10 +1,13 @@
 package driver
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Enqueuer interface {
 	SetClient(name string, client interface{})
-	ListPush(queue string, jobJSON string) (listLength int64, err error)
-	ListPushDelay(t time.Time, queue string, jobJSON string) (bool, error)
-	Poll()
+	ListPush(ctx context.Context, queue string, jobJSON string) (listLength int64, err error)
+	ListPushDelay(ctx context.Context, t time.Time, queue string, jobJSON string) (bool, error)
+	Poll(ctx context.Context)
 }
